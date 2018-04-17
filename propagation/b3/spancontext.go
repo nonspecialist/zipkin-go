@@ -35,16 +35,17 @@ func ParseHeaders(
 		return nil, ErrInvalidSampledHeader
 	}
 
+	if _, err := strconv.Atoi(hdrFlags); err != nil {
+		return nil, ErrInvalidFlagsHeader
+	}
 	switch hdrFlags {
-	case "", "0":
-		// sc.Debug = false
 	case "1":
 		sc.Debug = true
 		if sc.Sampled != nil {
 			sc.Sampled = nil
 		}
 	default:
-		return nil, ErrInvalidFlagsHeader
+		sc.Debug = false
 	}
 
 	if hdrTraceID != "" {
